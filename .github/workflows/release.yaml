@@ -1,0 +1,39 @@
+name: release
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - terms.txt
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Environment
+        run: |
+          version=$(date +v%Y.%m.%d)
+          title=$(git log -1 --merges --pretty=format:"%b")
+          echo "::set-env name=TAG::${version}"
+          echo "::set-env name=TITLE::${title}"
+
+      - name: Create New Tag
+        run: |
+          URL="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}"
+          git tag $TAG
+          git push $URL $TAG
+
+      - name: Create New Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG }}
+          release_name: ${{ env.TAG }}
+          body: ${{ env.TITLE }}
+          draft: false
+          prerelease: false
