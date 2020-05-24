@@ -23,9 +23,10 @@ jobs:
 
       - name: Create New Tag
         run: |
-          URL="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}"
+          git config user.name 'GitHub Actions'
+          git config user.email 'actions@github.com'
           git tag $TAG
-          git push $URL $TAG
+          git push --tags
 
       - name: Create New Release
         uses: actions/create-release@v1
