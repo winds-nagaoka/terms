@@ -17,9 +17,7 @@ jobs:
       - name: Setup Environment
         run: |
           version=$(TZ='Asia/Tokyo' date +v%Y-%m-%d)
-          title=$(git log -1 --merges --pretty=format:"%b")
-          echo "::set-env name=TAG::${version}"
-          echo "::set-env name=TITLE::${title}"
+          echo "TAG=$version" >> "$GITHUB_ENV"
 
       - name: Create New Tag
         run: |
