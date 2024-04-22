@@ -27,12 +27,7 @@ jobs:
           git push --tags
 
       - name: Create New Release
-        uses: actions/create-release@v1
+        run: |
+          gh release create $TAG -t $TAG --generate-notes --latest
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.TAG }}
-          release_name: ${{ env.TAG }}
-          body: ${{ env.TITLE }}
-          draft: false
-          prerelease: false
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
